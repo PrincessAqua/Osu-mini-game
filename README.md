@@ -3,3 +3,5 @@ This is a minigame made in Js inpired in Osu! just to practice some things, the 
 
 You can play the game downloading the index file and opening it with any browser
 or in the github repo website: https://princessaqua.github.io/Osu-mini-game/
+
+(only works for pc for now)
