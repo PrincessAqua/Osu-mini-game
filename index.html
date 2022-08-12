@@ -1,0 +1,117 @@
+<meta charset="UTF-8">
+<canvas width="1500" height="800"></canvas>
+
+
+<script>
+
+    var myCanvas = document.querySelector("canvas");
+    var pincel = myCanvas.getContext("2d");
+
+    var canvasWidth = 1500;
+    var canvasHeight = 800;
+
+    //pincel.fillStyle = "gray";
+    //pincel.fillRect(0,0,canvasWidth,canvasHeight);
+
+    var globalColors = ["red","green","blue","yellow","pink","orange","magenta"];
+    var globalNumber = [1,2,3,4,5,6,7];
+    var globalScore = 0;
+
+    var colorCounter = 0;
+    var numberCounter = 0;
+
+    function drawCircle(xcord, ycord, radius, color)
+    {
+        pincel.fillStyle = color;
+        pincel.beginPath();
+        pincel.arc(xcord, ycord, radius, 0, 2*Math.PI);
+        pincel.fill();
+
+    }
+
+    function drawOsuCircle(x,y,number,color)
+    {
+        drawCircle(x,y,41,"black");
+        drawCircle(x,y,40,"white");
+        drawCircle(x,y,36,color);
+        writeText(x-16,y+20,number,"white"); 
+
+    }
+
+    function drawRandomOsuCircle(x,y)
+    {
+        if(numberCounter >= 7)
+        {
+            numberCounter = 0;
+            colorCounter++;
+        }
+        if(colorCounter >= 7)
+        {
+            colorCounter = 0;
+        }
+        
+        drawOsuCircle(x,y,globalNumber[numberCounter],globalColors[colorCounter]);
+        ++numberCounter;
+    }
+
+    function rndNumber(max)
+    {
+        return Math.floor(Math.random()*max);
+
+    }
+
+    function writeText(x , y, texto, color) 
+    {
+        pincel.font="55px Arial";
+        pincel.fillStyle=color;
+        pincel.fillText(texto, x, y);    
+    }
+
+    function clearCanvas()
+    {
+        pincel.clearRect(0,0,canvasWidth,canvasHeight);
+    }
+
+    var randomX = 0;
+    var randomY = 0;
+
+    function newFrame()
+    {
+        clearCanvas();
+         randomX = rndNumber(canvasWidth);
+         randomY = rndNumber(canvasHeight);
+        drawRandomOsuCircle(randomX,randomY)
+    }
+
+    function actionOnCircle(event)
+    {
+        let cordX = event.pageX - myCanvas.offsetLeft;
+        let cordY = event.pageY - myCanvas.offsetTop;
+
+        if( (cordX < randomX + 41) &&
+            (cordX > randomX - 41) &&
+            (cordY < randomY + 41) &&
+            (cordY > randomY - 41))
+        {
+            globalScore += 100;
+        }
+
+        
+    }
+
+    function drawScore()
+    {
+        writeText(20,780,"Score: " + globalScore,"black");
+    }
+
+    var mlForGame = 450;
+
+
+        setInterval(newFrame,mlForGame);
+        setInterval(drawScore,mlForGame);
+        myCanvas.onclick = actionOnCircle;
+
+
+
+
+</script>
